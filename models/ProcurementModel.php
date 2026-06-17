@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 ini_set('display_errors', '1');
@@ -106,7 +107,6 @@ class ProcurementModel
 
             $this->db->commit();
             return ['ok' => true, 'order_id' => $orderId, 'po_number' => $header['po_number']];
-
         } catch (\Throwable $e) {
             $this->db->rollBack();
             error_log('CreateOrder FAILED: ' . $e->getMessage());
@@ -182,8 +182,10 @@ class ProcurementModel
         $stmt->execute([':id' => $orderId]);
         $current = $stmt->fetchColumn();
 
-        if (!$current || !isset($validTransitions[$current]) 
-            || !in_array($newStatus, $validTransitions[$current], true)) {
+        if (
+            !$current || !isset($validTransitions[$current])
+            || !in_array($newStatus, $validTransitions[$current], true)
+        ) {
             return false;
         }
 
@@ -222,7 +224,7 @@ class ProcurementModel
             }
 
             $this->db->prepare("UPDATE divisions SET budget_used = budget_used - :amt WHERE id = :div")
-                      ->execute([':amt' => $order['total_amount'], ':div' => $order['division_id']]);
+                ->execute([':amt' => $order['total_amount'], ':div' => $order['division_id']]);
 
             $this->db->prepare("DELETE FROM procurement_items WHERE order_id = :id")->execute([':id' => $orderId]);
             $this->db->prepare("DELETE FROM procurement_orders WHERE id = :id")->execute([':id' => $orderId]);

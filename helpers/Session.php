@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 ini_set('display_errors', '1');
@@ -40,11 +41,17 @@ class Session
         return '<input type="hidden" name="csrf_token" value="' . htmlspecialchars(self::generateCsrf()) . '">';
     }
 
-    public static function isLoggedIn(): bool { return isset($_SESSION['user_id']); }
+    public static function isLoggedIn(): bool
+    {
+        return isset($_SESSION['user_id']);
+    }
 
     public static function requireLogin(): void
     {
-        if (!self::isLoggedIn()) { header('Location: login.php'); exit; }
+        if (!self::isLoggedIn()) {
+            header('Location: login.php');
+            exit;
+        }
     }
 
     public static function requireRole(string ...$roles): void
@@ -56,9 +63,18 @@ class Session
         }
     }
 
-    public static function getUserId(): int { return (int)($_SESSION['user_id'] ?? 0); }
-    public static function getUserRole(): string { return $_SESSION['user_role'] ?? ''; }
-    public static function getDivisionId(): int { return (int)($_SESSION['division_id'] ?? 0); }
+    public static function getUserId(): int
+    {
+        return (int)($_SESSION['user_id'] ?? 0);
+    }
+    public static function getUserRole(): string
+    {
+        return $_SESSION['user_role'] ?? '';
+    }
+    public static function getDivisionId(): int
+    {
+        return (int)($_SESSION['division_id'] ?? 0);
+    }
 
     public static function setFlash(string $type, string $msg): void
     {

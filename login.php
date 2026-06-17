@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
@@ -63,6 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -70,14 +72,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
-        :root { --bs-body-bg: #0f172a; --accent: #6366f1; }
-        body { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); min-height: 100vh; font-family: 'Segoe UI', system-ui, sans-serif; display: flex; align-items: center; justify-content: center; }
-        .glass-card { background: rgba(30,41,59,.85); backdrop-filter: blur(12px); border: 1px solid rgba(99,102,241,.2); border-radius: 1rem; width: 100%; max-width: 400px; padding: 2.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .btn-accent { background: linear-gradient(135deg, #6366f1, #8b5cf6); border: none; color: #fff; transition: all 0.3s ease; }
-        .btn-accent:hover { background: linear-gradient(135deg, #4f46e5, #7c3aed); color: #fff; transform: translateY(-1px); }
-        .brand-glow { text-shadow: 0 0 20px rgba(99,102,241,.5); }
+        :root {
+            --bs-body-bg: #0f172a;
+            --accent: #6366f1;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .glass-card {
+            background: rgba(30, 41, 59, .85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(99, 102, 241, .2);
+            border-radius: 1rem;
+            width: 100%;
+            max-width: 400px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn-accent {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border: none;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .btn-accent:hover {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .brand-glow {
+            text-shadow: 0 0 20px rgba(99, 102, 241, .5);
+        }
     </style>
 </head>
+
 <body class="text-light">
     <div class="glass-card">
         <div class="text-center mb-4">
@@ -116,4 +154,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

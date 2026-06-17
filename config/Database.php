@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 class Database
@@ -16,7 +17,9 @@ class Database
     {
         $dsn = sprintf(
             'mysql:host=%s;port=%d;dbname=%s;charset=utf8mb4',
-            self::DB_HOST, self::DB_PORT, self::DB_NAME
+            self::DB_HOST,
+            self::DB_PORT,
+            self::DB_NAME
         );
 
         $options = [
@@ -36,7 +39,10 @@ class Database
     }
 
     private function __clone() {}
-    public function __wakeup() { throw new RuntimeException('Cannot unserialize singleton'); }
+    public function __wakeup()
+    {
+        throw new RuntimeException('Cannot unserialize singleton');
+    }
 
     public static function getInstance(): self
     {
