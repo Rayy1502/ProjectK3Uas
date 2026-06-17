@@ -30,6 +30,7 @@ foreach ($divs as $d) {
     if ($d['id'] == $divId) { $currentDiv = $d; break; }
 }
 ?>
+<!-- Heading -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -55,7 +56,7 @@ foreach ($divs as $d) {
     </style>
 </head>
 <body class="text-light">
-
+<!-- Navigasi Bar -->
 <nav class="navbar navbar-dark border-bottom border-secondary mb-4" style="background:rgba(15,23,42,.95)">
     <div class="container">
         <span class="navbar-brand fw-bold navbar-brand-glow">
@@ -115,7 +116,7 @@ foreach ($divs as $d) {
         </div>
     </div>
     <?php endif; ?>
-
+<!-- Form Staff Start -->
     <?php if ($role === 'staff'): ?>
     <div class="glass-card p-4 mb-4">
         <h5 class="mb-3"><i class="bi bi-plus-circle-fill me-2" style="color:var(--accent)"></i>Buat Pengajuan Procurement Baru</h5>
@@ -251,6 +252,8 @@ foreach ($divs as $d) {
                         <td class="text-center"><span class="badge <?= $badgeClass ?>"><?= $o['status'] ?></span></td>
                         <td><?= htmlspecialchars($o['requester_name']) ?></td>
                         <td class="text-center">
+<!-- Form Staff Ending -->
+<!-- Form Manager Start -->
                             <?php if ($role === 'manager'): ?>
 
                                 <?php if ($o['status'] === 'Pending'): ?>
@@ -271,7 +274,7 @@ foreach ($divs as $d) {
                                 <?php endif; ?>
 
                             <?php endif; ?>
-
+ <!-- Form Admin Start -->
                             <?php if ($role === 'admin'): ?>
 
                                 <?php if ($o['status'] === 'Approved by Manager'): ?>
@@ -295,7 +298,7 @@ foreach ($divs as $d) {
                                 <?php endif; ?>
 
                             <?php endif; ?>
-
+<!-- Form Admin End -->
                             <?php if (!$isLocked && in_array($role, ['admin', 'staff'])): ?>
                             <form method="POST" action="proses_procurement.php" class="d-inline" onsubmit="return confirm('Yakin hapus order ini?')">
                                 <input type="hidden" name="action" value="delete">
