@@ -108,37 +108,10 @@ switch ($action) {
         header('Location: view_create_order.php');
         exit;
 
-    case 'approve':
-        Session::requireRole('manager');
-
+    case 'update_status':
         $orderId = filter_input(INPUT_POST, 'order_id', FILTER_VALIDATE_INT);
-        if (!$orderId) {
-            Session::setFlash('danger', 'ID order tidak valid.');
-            header('Location: view_create_order.php');
-            exit;
-        }
-
-        $order = $model->getOrderById($orderId);
-        if (!$order || (int)$order['division_id'] !== Session::getDivisionId()) {
-            Session::setFlash('danger', 'Order tidak ditemukan atau bukan dari divisi Anda.');
-            header('Location: view_create_order.php');
-            exit;
-        }
-
-        $ok = $model->updateStatus($orderId, 'Approved by Manager', Session::getUserId());
-        Session::setFlash(
-            $ok ? 'success' : 'danger',
-            $ok ? 'Order berhasil disetujui.' : 'Gagal menyetujui. Pastikan status masih Pending.'
-        );
-
-        header('Location: view_create_order.php');
-        exit;
-
-    case 'reject':
-        Session::requireRole('manager');
-
-        $orderId = filter_input(INPUT_POST, 'order_id', FILTER_VALIDATE_INT);
-        $note    = trim($_POST['rejection_note'] ?? '');
+        $newStatus = trim($_POST['new_status'] ?? '');
+        $note = trim($_POST['rejection_note'] ?? '');
 
         if (!$orderId) {
             Session::setFlash('danger', 'ID order tidak valid.');
@@ -146,56 +119,37 @@ switch ($action) {
             exit;
         }
 
-        $order = $model->getOrderById($orderId);
-        if (!$order || (int)$order['division_id'] !== Session::getDivisionId()) {
-            Session::setFlash('danger', 'Order tidak ditemukan atau bukan dari divisi Anda.');
-            header('Location: view_create_order.php');
-            exit;
+        if ($newStatus === 'Approved by Manager') {
+            Session::requireRole('manager');
+            $order = $model->getOrderById($orderId);
+            if (!$order || (int)$order['division_id'] !== Session::getDivisionId()) {
+                Session::setFlash('danger', 'Order tidak ditemukan atau bukan dari divisi Anda.');
+                header('Location: view_create_order.php');
+                exit;
+            }
+            $ok = $model->updateStatus($orderId, 'Approved by Manager', Session::getUserId());
+            Session::setFlash($ok ? 'success' : 'danger', $ok ? 'Order berhasil disetujui.' : 'Gagal menyetujui. Pastikan status masih Pending.');
+        } elseif ($newStatus === 'Rejected') {
+            Session::requireRole('manager');
+            $order = $model->getOrderById($orderId);
+            if (!$order || (int)$order['division_id'] !== Session::getDivisionId()) {
+                Session::setFlash('danger', 'Order tidak ditemukan atau bukan dari divisi Anda.');
+                header('Location: view_create_order.php');
+                exit;
+            }
+            $ok = $model->updateStatus($orderId, 'Rejected', Session::getUserId(), $note);
+            Session::setFlash($ok ? 'success' : 'danger', $ok ? 'Order berhasil ditolak.' : 'Gagal menolak. Pastikan status masih Pending.');
+        } elseif ($newStatus === 'Ordered to Vendor') {
+            Session::requireRole('admin');
+            $ok = $model->updateStatus($orderId, 'Ordered to Vendor', Session::getUserId());
+            Session::setFlash($ok ? 'success' : 'danger', $ok ? 'Order berhasil dikirim ke vendor.' : 'Gagal. Pastikan status sudah Approved by Manager.');
+        } elseif ($newStatus === 'Received') {
+            Session::requireRole('admin');
+            $ok = $model->updateStatus($orderId, 'Received', Session::getUserId());
+            Session::setFlash($ok ? 'success' : 'danger', $ok ? 'Barang berhasil dikonfirmasi diterima.' : 'Gagal. Pastikan status sudah Ordered to Vendor.');
+        } else {
+            Session::setFlash('danger', 'Status tidak valid.');
         }
-
-        $ok = $model->updateStatus($orderId, 'Rejected', Session::getUserId(), $note);
-        Session::setFlash(
-            $ok ? 'success' : 'danger',
-            $ok ? 'Order berhasil ditolak.' : 'Gagal menolak. Pastikan status masih Pending.'
-        );
-
-        header('Location: view_create_order.php');
-        exit;
-
-    case 'order_to_vendor':
-        Session::requireRole('admin');
-
-        $orderId = filter_input(INPUT_POST, 'order_id', FILTER_VALIDATE_INT);
-        if (!$orderId) {
-            Session::setFlash('danger', 'ID order tidak valid.');
-            header('Location: view_create_order.php');
-            exit;
-        }
-
-        $ok = $model->updateStatus($orderId, 'Ordered to Vendor', Session::getUserId());
-        Session::setFlash(
-            $ok ? 'success' : 'danger',
-            $ok ? 'Order berhasil dikirim ke vendor.' : 'Gagal. Pastikan status sudah Approved by Manager.'
-        );
-
-        header('Location: view_create_order.php');
-        exit;
-
-    case 'mark_received':
-        Session::requireRole('admin');
-
-        $orderId = filter_input(INPUT_POST, 'order_id', FILTER_VALIDATE_INT);
-        if (!$orderId) {
-            Session::setFlash('danger', 'ID order tidak valid.');
-            header('Location: view_create_order.php');
-            exit;
-        }
-
-        $ok = $model->updateStatus($orderId, 'Received', Session::getUserId());
-        Session::setFlash(
-            $ok ? 'success' : 'danger',
-            $ok ? 'Barang berhasil dikonfirmasi diterima.' : 'Gagal. Pastikan status sudah Ordered to Vendor.'
-        );
 
         header('Location: view_create_order.php');
         exit;

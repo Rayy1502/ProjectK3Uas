@@ -7,7 +7,7 @@ class Database
     private PDO $pdo;
 
     private const DB_HOST = 'localhost';
-    private const DB_NAME = 'projectuask3';
+    private const DB_NAME = 'projectuas3';
     private const DB_USER = 'root';
     private const DB_PASS = '';
     private const DB_PORT = 3306;
